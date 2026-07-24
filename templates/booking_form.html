@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}New Booking - HotelMS{% endblock %}
+{% block content %}
+<h2 class="mb-4">New Booking</h2>
+
+<div class="card">
+    <div class="card-body">
+        {% if not guests %}
+        <p class="text-muted">You need to <a href="{{ url_for('add_guest') }}">add a guest</a> first.</p>
+        {% elif not rooms %}
+        <p class="text-muted">No available rooms right now. <a href="{{ url_for('add_room') }}">Add a room</a> or free one up.</p>
+        {% else %}
+        <form method="POST">
+            <div class="mb-3">
+                <label class="form-label">Guest</label>
+                <select name="guest_id" class="form-select" required>
+                    {% for g in guests %}
+                    <option value="{{ g.id }}">{{ g.full_name }} ({{ g.email }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Room</label>
+                <select name="room_id" class="form-select" required>
+                    {% for r in rooms %}
+                    <option value="{{ r.id }}">{{ r.room_number }} - {{ r.room_type }} (${{ '%.2f'|format(r.price) }}/night)</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Check-in Date</label>
+                    <input type="date" name="check_in_date" class="form-control" min="{{ today }}" value="{{ today }}" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Check-out Date</label>
+                    <input type="date" name="check_out_date" class="form-control" min="{{ today }}" required>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Create Booking</button>
+            <a href="{{ url_for('bookings') }}" class="btn btn-outline-secondary">Cancel</a>
+        </form>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

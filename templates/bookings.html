@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block title %}Bookings - HotelMS{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">Bookings</h2>
+    <a href="{{ url_for('add_booking') }}" class="btn btn-primary"><i class="bi bi-plus-lg"></i> New Booking</a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        {% if bookings %}
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>Guest</th>
+                        <th>Room</th>
+                        <th>Check-in</th>
+                        <th>Check-out</th>
+                        <th>Nights</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for b in bookings %}
+                    <tr>
+                        <td>{{ b.guest.full_name }}</td>
+                        <td>{{ b.room.room_number }} ({{ b.room.room_type }})</td>
+                        <td>{{ b.check_in_date }}</td>
+                        <td>{{ b.check_out_date }}</td>
+                        <td>{{ b.total_nights() }}</td>
+                        <td>${{ '%.2f'|format(b.total_amount()) }}</td>
+                        <td><span class="badge status-{{ b.status | replace(' ', '') }}">{{ b.status }}</span></td>
+                        <td class="text-end">
+                            {% if b.status == 'Booked' %}
+                            <form action="{{ url_for('checkin_booking', booking_id=b.id) }}" method="POST" class="d-inline">
+                                <button type="submit" class="btn btn-sm btn-success">Check In</button>
+                            </form>
+                            <form action="{{ url_for('cancel_booking', booking_id=b.id) }}" method="POST" class="d-inline" onsubmit="return confirm('Cancel this booking?');">
+                                <button type="submit" class="btn btn-sm btn-outline-warning">Cancel</button>
+                            </form>
+                            {% elif b.status == 'Checked In' %}
+                            <form action="{{ url_for('checkout_booking', booking_id=b.id) }}" method="POST" class="d-inline">
+                                <button type="submit" class="btn btn-sm btn-warning">Check Out</button>
+                            </form>
+                            {% endif %}
+                            <form action="{{ url_for('delete_booking', booking_id=b.id) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete this booking permanently?');">
+                                <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-muted mb-0">No bookings yet.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,60 @@
+body {
+    background-color: #f4f6f9;
+}
+
+.navbar {
+    background-color: #1f2937;
+}
+
+.navbar .nav-link {
+    color: #d1d5db;
+}
+
+.navbar .nav-link.active,
+.navbar .nav-link:hover {
+    color: #ffffff;
+}
+
+.card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.stat-card {
+    transition: transform 0.15s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+}
+
+.badge {
+    padding: 0.45em 0.75em;
+    font-weight: 500;
+}
+
+.status-Available, .status-Booked {
+    background-color: #22c55e;
+    color: #fff;
+}
+
+.status-Occupied, .status-CheckedIn {
+    background-color: #f59e0b;
+    color: #fff;
+}
+
+.status-Maintenance, .status-Cancelled {
+    background-color: #ef4444;
+    color: #fff;
+}
+
+.status-CheckedOut {
+    background-color: #6b7280;
+    color: #fff;
+}
+
+.table th {
+    font-weight: 600;
+    color: #374151;
+}
